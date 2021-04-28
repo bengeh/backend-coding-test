@@ -102,7 +102,7 @@ module.exports = (db) => {
     });
 
     app.get('/rides/:id', (req, res) => {
-        db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, function (err, rows) {
+        db.all(`SELECT * FROM Rides WHERE rideID=?`, req.params.id, function (err, rows) {
             if (err) {
                 return res.send({
                     error_code: 'SERVER_ERROR',
