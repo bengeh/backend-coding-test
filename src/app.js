@@ -1,15 +1,19 @@
 'use strict';
-
 const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const winston = require('winston')
+const logConfiguration = require('./logger')
+
+const logger = winston.createLogger(logConfiguration);
 
 module.exports = (db) => {
     app.get('/health', (req, res) => res.send('Healthy'));
 
     app.post('/rides', jsonParser, (req, res) => {
+        logger.warn("Hello, Winston logger, the first warning!");
         const startLatitude = Number(req.body.start_lat);
         const startLongitude = Number(req.body.start_long);
         const endLatitude = Number(req.body.end_lat);
@@ -86,6 +90,7 @@ module.exports = (db) => {
             }
 
             if (rows.length === 0) {
+                logger.error("error no rides found...")
                 return res.send({
                     error_code: 'RIDES_NOT_FOUND_ERROR',
                     message: 'Could not find any rides'
