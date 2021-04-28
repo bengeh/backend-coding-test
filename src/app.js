@@ -102,23 +102,31 @@ module.exports = (db) => {
     });
 
     app.get('/rides/:id', (req, res) => {
-        db.all(`SELECT * FROM Rides WHERE rideID=?`, req.params.id, function (err, rows) {
-            if (err) {
-                return res.send({
-                    error_code: 'SERVER_ERROR',
-                    message: 'Unknown error'
-                });
-            }
-
-            if (rows.length === 0) {
-                return res.send({
-                    error_code: 'RIDES_NOT_FOUND_ERROR',
-                    message: 'Could not find any rides'
-                });
-            }
-
-            res.send(rows);
-        });
+        //santizing input, assume id is purely number (security improvement)
+        if(/^\d+$/.test(req.params.id)){
+            db.all(`SELECT * FROM Rides WHERE rideID=?`, req.params.id, function (err, rows) {
+                if (err) {
+                    return res.send({
+                        error_code: 'SERVER_ERROR',
+                        message: 'Unknown error'
+                    });
+                }
+    
+                if (rows.length === 0) {
+                    return res.send({
+                        error_code: 'RIDES_NOT_FOUND_ERROR',
+                        message: 'Could not find any rides'
+                    });
+                }
+    
+                res.send(rows);
+            });
+        } else {
+            return res.send({
+                error_code: 'INPUT_ERROR',
+                message: 'Input error'
+            });
+        }
     });
 
     return app;
