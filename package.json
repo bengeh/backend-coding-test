@@ -8,6 +8,9 @@
   },
   "scripts": {
     "test": "mocha tests",
+    "test:load-health": "artillery quick -c 30 -n 100 http://localhost:8010/health/",
+    "test:load-get-rides": "artillery quick -c 30 -n 100 http://localhost:8010/rides/",
+    "test:load-get-single-rides": "artillery quick -c 30 -n 100 http://localhost:8010/rides/1",
     "start": "node index.js",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix",
@@ -30,6 +33,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "artillery": "^1.6.2",
     "mocha": "^6.1.4",
     "nyc": "^15.1.0",
     "pre-push": "^0.1.1",
