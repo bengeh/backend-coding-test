@@ -25,7 +25,7 @@ describe('API tests', () => {
         it('should return health', (done) => {
             request(app)
                 .get('/health')
-                .expect('Content-Type', /text/)
+                .expect('Content-Type', `application/json; charset=utf-8`)
                 .expect(200, done);
         });
     });
